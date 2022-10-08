@@ -6,7 +6,7 @@ this assignment.
 *
 * Name: Kush Patel Student ID: 104006218 Date: 5th october, 2022
 *_
-* Your app’s URL (from Cyclic) : ______________________________________________
+* Your app’s URL (from Cyclic) : https://awful-worm-pocket.cyclic.app/
 *
 *************************************************************************/ 
 
