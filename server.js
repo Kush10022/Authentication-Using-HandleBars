@@ -1,16 +1,4 @@
 /*************************************************************************
-* BTI325– Assignment 2
-* I took the help of my classmate in making the dataservice file whose name is ujval and also one of my friend Kalpaj help me a lot 
-in making thee server.js file actually he already complete this semester before from another college so he is helping me in making 
-this assignment. 
-*
-* Name: Kush Patel Student ID: 104006218 Date: 5th october, 2022
-*_
-* Your app’s URL (from Cyclic) : https://awful-worm-pocket.cyclic.app/
-*
-*************************************************************************/ 
-
-/*************************************************************************
 * BTI325– Assignment 3
 * I took the help of my classmate in making the dataservice file whose name is ujval and also one of my friend Kalpaj help me a lot 
 in making thee server.js file actually he already complete this semester before from another college so he is helping me in making 
