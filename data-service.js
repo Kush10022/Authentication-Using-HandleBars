@@ -64,8 +64,6 @@ module.exports.getDepartments = function () {
 
 /*------------------------------------------------------------------------------------------------------------------- */
 /* Assignment 2 */
-
-
 // part 3 step 3
 module.exports.addEmployee = (employeeData)=> {return new Promise((resolve, reject)=> {
     if (employeeData.isManager == undefined) {
@@ -78,7 +76,6 @@ module.exports.addEmployee = (employeeData)=> {return new Promise((resolve, reje
     resolve(employees);
   });
 }
-
 // PART 4
 // for employee by status.
 module.exports.getEmployeesByStatus = (status)=> {
@@ -138,5 +135,23 @@ module.exports.getEmployeeByNum = (numb) =>{
     reject("no result returnned");
   }
   resolve(num_info);
+  });
+}
+/*------------------------------------------------------------------------------------------------------------------- */
+/* Assignment 4 */
+module.exports.updateEmployee = function(employeeData) {
+  return new Promise((resolve, reject)=> {
+    let upemployee = false;
+    for (let i= 0; i < Emp.length; i++) { // iterate over each employee
+      if (Emp[i].SSN == employeeData.SSN) {  // check if their social security number is same or not.
+        Emp[i] = employeeData;   // if it is same then copy that and do counter increment.
+        Emp[i].employeeNum= i + 1;
+        upemployee = true; // set bool variable to true
+      }
+    }if (upemployee == false){ // if the value of employee is false then print the error message or you can say throw the error as reject 
+      reject("Data Not found");
+    } else{
+      resolve();
+    }
   });
 }

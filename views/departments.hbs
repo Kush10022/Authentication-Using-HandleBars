@@ -1,0 +1,31 @@
+{{!-- Assignment 4 part 4 step 1 --}}
+<div class="row">
+ <div class="col-md-12">
+ <h2>Departments</h2>
+ <hr>
+<div class="table-responsive"> {{!-- Part 4 step 2 --}}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Department Number</th>
+                    <th>Department Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each departments}} {{!--it will be used for the department. --}}
+                <tr>
+                    <td>
+                        <a href="/employees?department={{this.departmentId}}">{{this.departmentId}}</a>  {{!-- code to iterate over each department and
+simply render their id  --}}
+                    </td>            
+                    <td>
+                        <a href="/employees?department={{this.departmentId}}"> {{this.departmentName}}</a>{{!-- code to iterate over each department and
+simply render their name --}}
+                    </td>            
+                </tr>
+                {{/each}}
+                </tbody>
+        </table>
+    </div>
+ </div>
+</div>
