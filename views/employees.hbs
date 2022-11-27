@@ -1,9 +1,8 @@
 {{!--  Assignment 4 part 3 step 1 --}}
-
 <div class="row">
  <div class="col-md-12">
- <h2>Employees</h2>
- <hr />
+<h2>Employees <a href="/employees/add" class="btn btn-success pull-right">Add New Employee</a></h2>
+ <hr/>
 <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -23,8 +22,7 @@
                     <tr>
                         <td>{{this.employeeNum}}</td>
                         <td>
-                            <a href="/employee/{{this.employeeNum}}"
-                                >{{this.firstName}} {{this.lastName}}</a> {{!-- this one to print the first and last name  --}}
+                            <a href="/employee/{{this.employeeNum}}">{{this.firstName}} {{this.lastName}}</a> {{!-- this one to print the first and last name  --}}
                         </td>
                         <td>
                             <a href="mailto:{{this.email}}">{{this.email}}</a> {{!-- The "Email" column must be a "mailto" link to the user's email address for that row --}}
@@ -42,13 +40,15 @@
                             <a href=" /employees?department={{this.department}}">{{this.department}}</a>{{!-- this one for the employee department. --}}
                         </td>
                         <td>{{this.hireDate}}</td>
-                    </tr>
+                        <td> <a href="/employees/delete/{{employeeNum}}" class="btn btn-danger"> Remove </a> </td>
+                        {{else}}
+                    <div class="col-md-12 text-center">
+                <strong>{{message}}</strong>{{!--the following code that will conditionally display the "message" if there are no employees --}}
+            </div>
+            </tr>           
                     {{/each}}
                 </tbody>
             </table>
-            <div class="col-md-12 text-center">
-                <strong>{{message}}</strong>{{!--the following code that will conditionally display the "message" if there are no employees --}}
-            </div>
             </div>
         </div>
  </div>

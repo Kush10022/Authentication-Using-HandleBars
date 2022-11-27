@@ -1,4 +1,4 @@
-{{#employee}}   {{!-- i write this so i dont need to write employee. everytime to access their object. Actually my friend kalpaj teach me this thing --}}
+{{#viewData.employee}}   {{!-- i write this so i dont need to write employee. everytime to access their object. Actually my friend kalpaj teach me this thing --}}
 <div class="row">
     <div class="col-md-12">
         <h2>{{firstName}} {{lastName}} - Employee: {{employeeNum}}</h2>
@@ -124,84 +124,16 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="department"> Department: </label>
-                            {{#equal department "1" }}
-                            <select
-                                class="form-control"name="department"id="department">
-                                <option value="1" selected>Creative Services</option>
-                                <option value="2">Product Developmnt</option>
-                                <option value="3">Marketing</option>
-                                <option value="4">Strategic Planning</option>
-                                <option value="5">Accounting</option>
-                                <option value="6">Human resources</option>
-                                <option value="7">Quality Analysis</option>
-                            </select>
-                            {{/equal}} {{#equal department "2" }}
-                            <select
-                                class="form-control"name="department"id="department">
-                                <option value="1">Creative Services</option>
-                                <option value="2" selected>Product Developmnt</option>
-                                <option value="3">Marketing</option>
-                                <option value="4">Strategic Planning</option>
-                                <option value="5">Accounting</option>
-                                <option value="6">Human resources</option>
-                                <option value="7">Quality Analysis</option>
-                            </select>
-                            {{/equal}} {{#equal department "3" }}
-                            <select
-                                class="form-control"name="department"id="department">
-                                <option value="1">Creative Services</option>
-                                <option value="2">Product Developmnt</option>
-                                <option value="3" selected>Marketing</option>
-                                <option value="4">Strategic Planning</option>
-                                <option value="5">Accounting</option>
-                                <option value="6">Human resources</option>
-                                <option value="7">Quality Analysis</option>
-                            </select>
-                            {{/equal}} {{#equal department "4" }}
-                            <select
-                                class="form-control"name="department"id="department">
-                                <option value="1">Creative Services</option>
-                                <option value="2">Product Developmnt</option>
-                                <option value="3">Marketing</option>
-                                <option value="4" selected>Strategic Planning</option>
-                                <option value="5">Accounting</option>
-                                <option value="6">Human resources</option>
-                                <option value="7">Quality Analysis</option>
-                            </select>
-                            {{/equal}} {{#equal department "5" }}
-                            <select
-                                class="form-control"name="department"id="department">
-                                <option value="1">Creative Services</option>
-                                <option value="2">Product Developmnt</option>
-                                <option value="3">Marketing</option>
-                                <option value="4">Strategic Planning</option>
-                                <option value="5" selected>Accounting</option>
-                                <option value="6">Human resources</option>
-                                <option value="7">Quality Analysis</option>
-                            </select>
-                            {{/equal}} {{#equal department "6" }}
-                            <select
-                                class="form-control"name="department"id="department">
-                                <option value="1">Creative Services</option>
-                                <option value="2">Product Developmnt</option>
-                                <option value="3">Marketing</option>
-                                <option value="4">Strategic Planning</option>
-                                <option value="5">Accounting</option>
-                                <option value="6" selected>Human resources</option>
-                                <option value="7">Quality Analysis</option>
-                            </select>
-                            {{/equal}} {{#equal department "7" }}
-                            <select
-                                class="form-control"name="department"id="department">
-                                <option value="1">Creative Services</option>
-                                <option value="2">Product Developmnt</option>
-                                <option value="3">Marketing</option>
-                                <option value="4">Strategic Planning</option>
-                                <option value="5">Accounting</option>
-                                <option value="6">Human resources</option>
-                                <option value="7" selected>Quality Analysis</option>
-                            </select>
-                            {{/equal}}
+                               {{#if viewData.departments}}
+                        <select class="form-control" name="department" id="department">
+                            {{#each viewData.departments}}
+                        <option value="{{departmentId}}" {{#if selected}} selected {{/if}} >{{departmentName}}
+                        </option>
+                            {{/each}}
+                        </select>
+                            {{else}}
+                    <div>No Departments</div>
+                            {{/if}}
                         </div>
                     </div>
                     <div class="row">
@@ -225,4 +157,4 @@
     </form>
 </div>
 </div>
-{{/employee}}
+{{/viewData.employee}}
