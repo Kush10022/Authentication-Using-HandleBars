@@ -1,3 +1,14 @@
+/*************************************************************************
+* BTI325– Assignment 6
+* I took the help of my classmate in making the server and data service-auth.js file whose name is ujval and also one of my friend Kalpaj help me a lot 
+in making both file actually he already complete this semester before from another college so he is helping me in completing 
+this assignment.
+*
+* Name: Kush Patel Student ID: 104006218 Date: 4th December,2022
+*
+* Online Cyclic Link: https://drab-plum-bonobo-vest.cyclic.app/
+*************************************************************************/ 
+
 var userdb ="mongodb+srv://Kush:Beats121@userdb.n4wbl1j.mongodb.net/?retryWrites=true&w=majority";
 var mongoose = require("mongoose");
 var bcrypt = require('bcryptjs')

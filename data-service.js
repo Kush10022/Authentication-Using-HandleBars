@@ -1,13 +1,12 @@
 /*************************************************************************
-* BTI325– Assignment 3
-* I took the help of my classmate in making the dataservice file whose name is ujval and also one of my friend Kalpaj help me a lot 
-in making thee server.js file actually he already complete this semester before from another college so he is helping me in making 
+* BTI325– Assignment 6
+* I took the help of my classmate in making the server and data service-auth.js file whose name is ujval and also one of my friend Kalpaj help me a lot 
+in making both file actually he already complete this semester before from another college so he is helping me in completing 
 this assignment.
 *
-* Name: Kush Patel Student ID: 104006218 Date: 28th October, 2022
+* Name: Kush Patel Student ID: 104006218 Date: 4th December,2022
 *
-* Your app’s URL (from Cyclic Heroku) that I can click to see your application:
-*  https://blooming-springs-89413.herokuapp.com/
+* Online Cyclic Link: https://drab-plum-bonobo-vest.cyclic.app/
 *************************************************************************/ 
 
 
