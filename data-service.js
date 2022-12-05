@@ -58,6 +58,12 @@ var Department = sequelize.define("Department",{departmentId:{
   departmentName: Sequelize.STRING
 });
 
+
+
+
+
+
+
 // updating all the dataservice function.
 
 module.exports.initialize = function () {

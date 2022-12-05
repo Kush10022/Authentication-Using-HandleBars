@@ -6,7 +6,7 @@ this assignment.
 *
 * Name: Kush Patel Student ID: 104006218 Date: 26th November,2022
 *
-* Online Cyclic Link:
+* Online Cyclic Link: https://glorious-pullover-seal.cyclic.app/
 *************************************************************************/ 
 
 var express = require("express");
@@ -14,6 +14,8 @@ var path = require("path");
 const app = express();
 app.use(express.static("public"));
 var dataservice = require('./data-service.js');
+var dataServiceAuth = require('./data-service-auth.js');
+var clientSessions = require("client-sessions");
 // part 2 step 1
 var multer = require("multer");
 //part 2 step 3
@@ -65,6 +67,79 @@ helpers:{
 }
 }
 }));
+
+
+// Setup client-sessions
+app.use(clientSessions({
+  cookieName: "session", // this is the object name that will be added to 'req'
+  secret: "week10example_web322", // this should be a long un-guessable string.
+  duration: 2 * 60 * 1000, // duration of the session in milliseconds (2 minutes)
+  activeDuration: 1000 * 60 // the session will be extended by this many ms each request (1 minute)
+}));
+
+
+app.use(function(req, res, next) {
+  res.locals.session = req.session;
+  next();
+ });
+
+ // This is a helper middleware function that checks if a user is logged in
+// we can use it in any route that we want to protect against unauthenticated access.
+// A more advanced version of this would include checks for authorization as well after
+// checking if the user is authenticated
+function ensureLogin(req, res, next) {
+  if (!req.session.user) {
+    res.redirect("/login");
+  } else {
+    next();
+  }
+}
+
+app.get('/login', (req, res)=> {
+  res.render('login');
+});
+
+app.get('/register', (req, res)=> {
+  res.render('register');
+});
+
+app.post('/register', (req, res) => {
+  dataServiceAuth.registerUser(req.body).then((data) => {
+     res.render("register",{successMessage:"User created"});
+ }).catch(err => res.render("register",{errorMessage: err, userName: req.body.userName}));
+});
+
+app.post('/login', (req, res) => {
+ req.body.userAgent = req.get('User-Agent');
+
+ dataServiceAuth.checkUser(req.body).then((user) => { 
+     req.session.user = { 
+         userName: req.body.userName,    // complete it with authenticated user's userName 
+         email:    user.email,        // complete it with authenticated user's email 
+         loginHistory: user.loginHistory        // complete it with authenticated user's loginHistory 
+     } 
+  
+     res.redirect('/employees'); 
+ }).catch(err => res.render("login",{errorMessage: err, userName: req.body.userName}));
+
+
+});
+app.get('/logout', (req, res)=> {
+req.session.reset();
+res.redirect("/");
+});
+
+
+app.get('/userHistory',ensureLogin, (req, res)=>{
+res.render('userHistory');
+});
+
+
+
+
+
+
+
 // Assignment 4 Part 1 step 1
 app.set('view engine', '.hbs');
 
@@ -78,13 +153,13 @@ app.use(function(req,res,next){
   });
 
 //part 2 step 2
-app.post("/images/add", upload.single("imageFile"), (req, res) => {
+app.post("/images/add",ensureLogin, upload.single("imageFile"), (req, res) => {
   res.redirect("/images");
 });
 
 
 //part 2 step 3 // assignement 4 part 2 step 1
-app.get("/images",function(req,res){
+app.get("/images",ensureLogin,function(req,res){
   fs.readdir("./public/images/uploaded", function(err, items){ // updating for the handlebars.
       for (var i=0; i<items.length; i++) {  // for loop so that i can print every image that user can upload.
           items[i];
@@ -94,7 +169,7 @@ app.get("/images",function(req,res){
 });
 
 // part 3 step 2
-app.post("/employees/add", (req, res) => {
+app.post("/employees/add",ensureLogin, (req, res) => {
   dataservice.addEmployee(req.body).then((data) =>{
       res.redirect("/employees"); // When the addEmployee function resolves successfully, redirect to the "/employees" route. 
   });
@@ -102,7 +177,7 @@ app.post("/employees/add", (req, res) => {
 
 // part 4 step 1 
 // updating everything to render so that it connect to hbs file.
-app.get('/employees', function(req, res) {
+app.get('/employees',ensureLogin, function(req, res) {
 if(req.query.department){
   dataservice.getEmployeesByDepartment(req.query.department).then((data) => { // this checks if the query string is for department. 
     res.render("employees",data.length>0?{employees:data}:{message:"No results"});  // modifying to use res.render instead of res.json
@@ -126,7 +201,7 @@ if(req.query.department){
 }});
 
 // part 4 step 2
-app.get("/employee/:empNum", (req, res) => {
+app.get("/employee/:empNum",ensureLogin, (req, res) => {
   // initialize an empty object to store the values
   let viewData = {};
   dataservice.getEmployeeByNum(req.params.empNum).then((data) => {
@@ -172,7 +247,7 @@ app.get("/about", (req, res) => { // updating for the handleBars about root
 
 // Step 2
 
-app.get('/employees/add', function(req, res) { // updating for the handleBars employees add root
+app.get('/employees/add',ensureLogin, function(req, res) { // updating for the handleBars employees add root
   dataservice.getDepartments().then((data)=>{
     res.render("addEmployee", {departments:data});
 }).catch((err)=>{
@@ -180,7 +255,7 @@ app.get('/employees/add', function(req, res) { // updating for the handleBars em
 });
 });
 
-app.get('/images/add', function(req, res) { // updating for the handleBars image add root
+app.get('/images/add',ensureLogin, function(req, res) { // updating for the handleBars image add root
   res.render("addImage");
 });
 
@@ -190,27 +265,27 @@ app.get('/images/add', function(req, res) { // updating for the handleBars image
 //   });
 // });
 
-app.post("/employee/update", (req, res) => { // for the updated employee
+app.post("/employee/update",ensureLogin, (req, res) => { // for the updated employee
   dataservice.updateEmployee(req.body).then((data) => {  // updating the employee post method to print all the employees by using the dataService module function.
     res.redirect("/employees");
     
 }).catch(err => res.render({message: "no results"}));
 });
 
-app.get('/managers', function(req, res) {
+/* app.get('/managers', function(req, res) {
   dataservice.getManagers().then((dataservice) => {
     res.render("departments",dataservice.length>0?
     {departments:dataservice}:{message:"No results."})
 });
 });
-
-app.get('/departments', function(req, res) {  // for the department 
+ */
+app.get('/departments',ensureLogin, function(req, res) {  // for the department 
   dataservice.getDepartments().then((data) => {
     res.render("departments", {departments: data});  // updating the get method to render so that it can connect to hbs file of department.
 }).catch(err => res.render({message: "no results"}));;
 });
 
-app.get("/employees/delete/:empNum",(req,res)=>{
+app.get("/employees/delete/:empNum",ensureLogin,(req,res)=>{
   dataservice.deleteEmployeeByNum(req.params.empNum).then(()=>{
       res.redirect("/employees");
   }).catch((err)=>{
@@ -218,11 +293,11 @@ app.get("/employees/delete/:empNum",(req,res)=>{
   });
 });
 
-app.get("/departments/add",(req,res)=>{
+app.get("/departments/add",ensureLogin,(req,res)=>{
   res.render("addDepartment");
 });
 
-app.post("/departments/add", (req, res)=>{
+app.post("/departments/add", ensureLogin,(req, res)=>{
   dataservice.addDepartment(req.body).then(()=>{
       res.redirect("/departments");
   }).catch((err)=>{
@@ -230,7 +305,7 @@ app.post("/departments/add", (req, res)=>{
   });
 });
 
-app.post("/department/update",(req,res)=>{
+app.post("/department/update",ensureLogin,(req,res)=>{
   dataservice.updateDepartment(req.body).then(()=>{
       res.redirect("/departments");
   }).catch((err)=>{
@@ -238,7 +313,7 @@ app.post("/department/update",(req,res)=>{
   });
 });
 
-app.get("/department/:departmentId",(req,res)=>{
+app.get("/department/:departmentId",ensureLogin,(req,res)=>{
   dataservice.getDepartmentById(req.params.departmentId).then((data)=>{
       if (!data)
           {res.status(404).send("Department not found");}
@@ -253,7 +328,9 @@ app.use(function (req, res) {
   res.sendFile(path.join(__dirname,"./views/error.html"));
 });
 
-dataservice.initialize().then(function () {
+dataservice.initialize()
+.then(dataServiceAuth.initialize)
+.then(function () {
   app.listen(port, onhttp);
  })
  .catch(function (err) {
